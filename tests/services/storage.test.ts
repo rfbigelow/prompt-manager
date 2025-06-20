@@ -3,26 +3,32 @@ import { StorageService } from "../../src/services/storage.ts";
 import type { Prompt, PromptVersion } from "../../src/models/prompt.ts";
 import { join } from "@std/path";
 
-// Create a temporary directory for tests
-const testDir = await Deno.makeTempDir({ prefix: "prompt_manager_test_" });
-
 Deno.test("StorageService initialization", async () => {
-  const storage = new StorageService(testDir);
-  await storage.init();
+  const testDir = await Deno.makeTempDir({ prefix: "storage_init_test_" });
+  
+  try {
+    const storage = new StorageService(testDir);
+    await storage.init();
 
-  // Check that directories were created
-  const promptsDir = join(testDir, "prompts");
-  const versionsDir = join(testDir, "versions");
-  
-  const promptsDirInfo = await Deno.stat(promptsDir);
-  const versionsDirInfo = await Deno.stat(versionsDir);
-  
-  assertEquals(promptsDirInfo.isDirectory, true);
-  assertEquals(versionsDirInfo.isDirectory, true);
+    // Check that directories were created
+    const promptsDir = join(testDir, "prompts");
+    const versionsDir = join(testDir, "versions");
+    
+    const promptsDirInfo = await Deno.stat(promptsDir);
+    const versionsDirInfo = await Deno.stat(versionsDir);
+    
+    assertEquals(promptsDirInfo.isDirectory, true);
+    assertEquals(versionsDirInfo.isDirectory, true);
+  } finally {
+    await Deno.remove(testDir, { recursive: true });
+  }
 });
 
 Deno.test("Save and retrieve prompt", async () => {
-  const storage = new StorageService(testDir);
+  const testDir = await Deno.makeTempDir({ prefix: "storage_save_test_" });
+  
+  try {
+    const storage = new StorageService(testDir);
   await storage.init();
 
   const prompt: Prompt = {
@@ -53,10 +59,16 @@ Deno.test("Save and retrieve prompt", async () => {
   assertEquals(retrieved?.id, "test-prompt-1");
   assertEquals(retrieved?.name, "Test Prompt");
   assertEquals(retrieved?.currentVersion.content, "Test content");
+  } finally {
+    await Deno.remove(testDir, { recursive: true });
+  }
 });
 
 Deno.test("Get next version number", async () => {
-  const storage = new StorageService(testDir);
+  const testDir = await Deno.makeTempDir({ prefix: "storage_version_test_" });
+  
+  try {
+    const storage = new StorageService(testDir);
   await storage.init();
 
   const promptId = "test-prompt-2";
@@ -80,10 +92,16 @@ Deno.test("Get next version number", async () => {
   // Next version should be 4
   nextVersion = await storage.getNextVersionNumber(promptId);
   assertEquals(nextVersion, 4);
+  } finally {
+    await Deno.remove(testDir, { recursive: true });
+  }
 });
 
 Deno.test("List prompts", async () => {
-  const storage = new StorageService(testDir);
+  const testDir = await Deno.makeTempDir({ prefix: "storage_list_test_" });
+  
+  try {
+    const storage = new StorageService(testDir);
   await storage.init();
 
   // Save multiple prompts
@@ -113,9 +131,7 @@ Deno.test("List prompts", async () => {
   const list = await storage.listPrompts();
   const testPrompts = list.filter(p => p.id.startsWith("list-test-"));
   assertEquals(testPrompts.length, 2);
-});
-
-// Cleanup after all tests
-globalThis.addEventListener("unload", async () => {
-  await Deno.remove(testDir, { recursive: true });
+  } finally {
+    await Deno.remove(testDir, { recursive: true });
+  }
 });
