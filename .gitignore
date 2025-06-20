@@ -1,0 +1,14 @@
+# Deno
+coverage/
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
+
+# Temporary files
+*.tmp
+*.temp
+
+# User data
+.prompt-manager/
