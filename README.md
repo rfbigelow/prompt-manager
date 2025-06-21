@@ -20,7 +20,7 @@ A command-line tool for managing and versioning AI prompts with full version his
 ### Clone and Build
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/rfbigelow/prompt-manager.git
 cd prompt-manager
 
 # Build executable
@@ -148,7 +148,7 @@ Prompts are stored in your home directory under `~/.prompt-manager/`:
 ### Setup
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/rfbigelow/prompt-manager.git
 cd prompt-manager
 ```
 
