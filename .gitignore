@@ -1,5 +1,6 @@
 # Deno
 coverage/
+dist/
 .DS_Store
 
 # Editor
