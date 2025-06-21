@@ -102,7 +102,11 @@ prompt-manager versions 550e8400-e29b-41d4-a716-446655440000
 ### Compare Versions
 
 ```bash
-prompt-manager compare 550e8400-e29b-41d4-a716-446655440000 770g0611-g40d-63f6-c938-668877661222 880h1722-h51e-74g7-d049-779988772333
+# Compare using version numbers (recommended)
+prompt-manager compare 550e8400-e29b-41d4-a716-446655440000 v1 v2
+
+# Or mix version numbers and IDs
+prompt-manager compare 550e8400-e29b-41d4-a716-446655440000 v1 880h1722-h51e-74g7-d049-779988772333
 
 # Example output:
 # Comparing v1 → v2
@@ -118,11 +122,15 @@ prompt-manager compare 550e8400-e29b-41d4-a716-446655440000 770g0611-g40d-63f6-c
 ### Revert to Previous Version
 
 ```bash
+# Revert using version number (recommended)
+prompt-manager revert 550e8400-e29b-41d4-a716-446655440000 v1
+
+# Or using version ID
 prompt-manager revert 550e8400-e29b-41d4-a716-446655440000 770g0611-g40d-63f6-c938-668877661222
 
 # Example output:
 # ✓ Reverted successfully
-# New version: 3
+# New version: 4
 ```
 
 ## Data Storage

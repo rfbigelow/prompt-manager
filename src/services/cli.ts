@@ -70,7 +70,9 @@ Examples:
   prompt-manager get <id>
   prompt-manager list
   prompt-manager versions <id>
-  prompt-manager compare <id> <from-version-id> <to-version-id>
+  prompt-manager compare <id> v1 v3
+  prompt-manager compare <id> <version-id> v2
+  prompt-manager revert <id> v1
   prompt-manager revert <id> <version-id>
     `);
   }
@@ -188,17 +190,19 @@ Examples:
 
   private async compareVersions(args: ParsedArgs): Promise<void> {
     const promptId = args._[1] as string;
-    const fromVersionId = args._[2] as string;
-    const toVersionId = args._[3] as string;
+    const fromVersionRef = args._[2] as string;
+    const toVersionRef = args._[3] as string;
 
-    if (!promptId || !fromVersionId || !toVersionId) {
-      console.error("Error: prompt ID and two version IDs are required");
+    if (!promptId || !fromVersionRef || !toVersionRef) {
+      console.error("Error: prompt ID and two version references are required");
+      console.error("Usage: prompt-manager compare <prompt-id> <from-version> <to-version>");
+      console.error("Version can be: v1, v2, v3... or version ID");
       Deno.exit(1);
     }
 
-    const result = await this.promptManager.compareVersions(promptId, fromVersionId, toVersionId);
+    const result = await this.promptManager.compareVersions(promptId, fromVersionRef, toVersionRef);
     if (!result) {
-      console.error("Error: Could not compare versions");
+      console.error("Error: Could not compare versions. Check that prompt and versions exist.");
       Deno.exit(1);
     }
 
@@ -222,16 +226,18 @@ Examples:
 
   private async revertToVersion(args: ParsedArgs): Promise<void> {
     const promptId = args._[1] as string;
-    const versionId = args._[2] as string;
+    const versionRef = args._[2] as string;
 
-    if (!promptId || !versionId) {
-      console.error("Error: Prompt ID and version ID are required");
+    if (!promptId || !versionRef) {
+      console.error("Error: Prompt ID and version reference are required");
+      console.error("Usage: prompt-manager revert <prompt-id> <version>");
+      console.error("Version can be: v1, v2, v3... or version ID");
       Deno.exit(1);
     }
 
-    const prompt = await this.promptManager.revertToVersion(promptId, versionId);
+    const prompt = await this.promptManager.revertToVersion(promptId, versionRef);
     if (!prompt) {
-      console.error("Error: Could not revert to version");
+      console.error("Error: Could not revert to version. Check that prompt and version exist.");
       Deno.exit(1);
     }
 
