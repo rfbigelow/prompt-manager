@@ -242,3 +242,4 @@ Robert F. Bigelow Jr.
 
 - Built with [Deno](https://deno.land/)
 - Uses Deno's standard library for core functionality
+- Developed in collaboration with [Claude Code](https://claude.ai/code) as a case study in AI-assisted development
