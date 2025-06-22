@@ -226,16 +226,9 @@ deno task test:coverage
 - **UUID Identifiers**: Ensures unique IDs across systems
 - **Separate Version Files**: Each version stored independently for easy access
 
-## Contributing
+## Project Status
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Make your changes
-4. Run tests (`deno task test`)
-5. Ensure code is formatted (`deno task fmt`)
-6. Commit your changes (`git commit -m 'Add amazing feature'`)
-7. Push to the branch (`git push origin feature/amazing-feature`)
-8. Open a Pull Request
+This is a case study project created to demonstrate working with Claude Code. It's a fully functional tool but is not actively seeking contributions.
 
 ## License
 
