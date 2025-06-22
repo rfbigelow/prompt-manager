@@ -1,10 +1,10 @@
 import { StorageService } from "./storage.ts";
 import {
   Prompt,
-  PromptVersion,
-  PromptWithVersion,
   PromptCreateInput,
   PromptUpdateInput,
+  PromptVersion,
+  PromptWithVersion,
   VersionComparisonResult,
 } from "../models/prompt.ts";
 
@@ -49,7 +49,10 @@ export class PromptManager {
     };
   }
 
-  async updatePrompt(id: string, input: PromptUpdateInput): Promise<PromptWithVersion | null> {
+  async updatePrompt(
+    id: string,
+    input: PromptUpdateInput,
+  ): Promise<PromptWithVersion | null> {
     const existing = await this.storage.getPrompt(id);
     if (!existing) {
       return null;
@@ -59,7 +62,10 @@ export class PromptManager {
     const prompt = { ...existing };
     let newVersion: PromptVersion | null = null;
 
-    if (input.content !== undefined && input.content !== existing.currentVersion.content) {
+    if (
+      input.content !== undefined &&
+      input.content !== existing.currentVersion.content
+    ) {
       const versionNumber = await this.storage.getNextVersionNumber(id);
       newVersion = {
         id: crypto.randomUUID(),
@@ -88,7 +94,10 @@ export class PromptManager {
     };
   }
 
-  async getPrompt(id: string, includeVersions = false): Promise<PromptWithVersion | null> {
+  async getPrompt(
+    id: string,
+    includeVersions = false,
+  ): Promise<PromptWithVersion | null> {
     const prompt = await this.storage.getPrompt(id);
     if (!prompt) {
       return null;
@@ -109,16 +118,19 @@ export class PromptManager {
     return await this.storage.getAllVersions(id);
   }
 
-  private async resolveVersionReference(promptId: string, versionRef: string): Promise<string | null> {
+  private async resolveVersionReference(
+    promptId: string,
+    versionRef: string,
+  ): Promise<string | null> {
     // Check if it's a version number reference (e.g., "v1", "v2")
     const versionMatch = versionRef.match(/^v(\d+)$/i);
     if (versionMatch) {
       const versionNumber = parseInt(versionMatch[1]);
       const versions = await this.storage.getAllVersions(promptId);
-      const version = versions.find(v => v.version === versionNumber);
+      const version = versions.find((v) => v.version === versionNumber);
       return version?.id || null;
     }
-    
+
     // Otherwise treat it as a version ID
     return versionRef;
   }
@@ -129,13 +141,19 @@ export class PromptManager {
     toVersionRef: string,
   ): Promise<VersionComparisonResult | null> {
     // Resolve version references to IDs
-    const fromVersionId = await this.resolveVersionReference(promptId, fromVersionRef);
-    const toVersionId = await this.resolveVersionReference(promptId, toVersionRef);
-    
+    const fromVersionId = await this.resolveVersionReference(
+      promptId,
+      fromVersionRef,
+    );
+    const toVersionId = await this.resolveVersionReference(
+      promptId,
+      toVersionRef,
+    );
+
     if (!fromVersionId || !toVersionId) {
       return null;
     }
-    
+
     const fromVersion = await this.storage.getVersion(promptId, fromVersionId);
     const toVersion = await this.storage.getVersion(promptId, toVersionId);
 
@@ -173,13 +191,16 @@ export class PromptManager {
     };
   }
 
-  async revertToVersion(promptId: string, versionRef: string): Promise<PromptWithVersion | null> {
+  async revertToVersion(
+    promptId: string,
+    versionRef: string,
+  ): Promise<PromptWithVersion | null> {
     // Resolve version reference to ID
     const versionId = await this.resolveVersionReference(promptId, versionRef);
     if (!versionId) {
       return null;
     }
-    
+
     const prompt = await this.storage.getPrompt(promptId);
     const version = await this.storage.getVersion(promptId, versionId);
 

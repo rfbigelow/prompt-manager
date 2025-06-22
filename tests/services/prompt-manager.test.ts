@@ -4,7 +4,7 @@ import { StorageService } from "../../src/services/storage.ts";
 
 Deno.test("Create prompt with initial version", async () => {
   const testDir = await Deno.makeTempDir({ prefix: "pm_create_test_" });
-  
+
   try {
     const storage = new StorageService(testDir);
     const manager = new PromptManager(storage);
@@ -28,7 +28,7 @@ Deno.test("Create prompt with initial version", async () => {
 
 Deno.test("Update prompt creates new version", async () => {
   const testDir = await Deno.makeTempDir({ prefix: "pm_update_test_" });
-  
+
   try {
     const storage = new StorageService(testDir);
     const manager = new PromptManager(storage);
@@ -57,7 +57,7 @@ Deno.test("Update prompt creates new version", async () => {
 
 Deno.test("Update prompt metadata without new version", async () => {
   const testDir = await Deno.makeTempDir({ prefix: "pm_metadata_test_" });
-  
+
   try {
     const storage = new StorageService(testDir);
     const manager = new PromptManager(storage);
@@ -91,7 +91,7 @@ Deno.test("Update prompt metadata without new version", async () => {
 
 Deno.test("Compare versions", async () => {
   const testDir = await Deno.makeTempDir({ prefix: "pm_compare_test_" });
-  
+
   try {
     const storage = new StorageService(testDir);
     const manager = new PromptManager(storage);
@@ -110,7 +110,7 @@ Deno.test("Compare versions", async () => {
     const comparison = await manager.compareVersions(
       created.id,
       created.currentVersion.id,
-      updated!.currentVersion.id
+      updated!.currentVersion.id,
     );
 
     assertExists(comparison);
@@ -124,7 +124,7 @@ Deno.test("Compare versions", async () => {
 
 Deno.test("Revert to previous version", async () => {
   const testDir = await Deno.makeTempDir({ prefix: "pm_revert_test_" });
-  
+
   try {
     const storage = new StorageService(testDir);
     const manager = new PromptManager(storage);
@@ -151,7 +151,10 @@ Deno.test("Revert to previous version", async () => {
     assertExists(reverted);
     assertEquals(reverted?.currentVersion.content, "Original content");
     assertEquals(reverted?.currentVersion.version, 4); // New version number
-    assertEquals(reverted?.currentVersion.changeDescription, "Reverted to version 1");
+    assertEquals(
+      reverted?.currentVersion.changeDescription,
+      "Reverted to version 1",
+    );
   } finally {
     await Deno.remove(testDir, { recursive: true });
   }
@@ -159,7 +162,7 @@ Deno.test("Revert to previous version", async () => {
 
 Deno.test("Get prompt with all versions", async () => {
   const testDir = await Deno.makeTempDir({ prefix: "pm_versions_test_" });
-  
+
   try {
     const storage = new StorageService(testDir);
     const manager = new PromptManager(storage);

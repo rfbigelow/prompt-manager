@@ -1,5 +1,9 @@
 import { assertEquals, assertExists } from "@std/testing";
-import type { Prompt, PromptVersion, PromptWithVersion } from "../../src/models/prompt.ts";
+import type {
+  Prompt,
+  PromptVersion,
+  PromptWithVersion,
+} from "../../src/models/prompt.ts";
 
 Deno.test("Prompt model structure", () => {
   const prompt: Prompt = {

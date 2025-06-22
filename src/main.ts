@@ -23,7 +23,10 @@ async function main() {
   try {
     await cliService.run(args);
   } catch (error) {
-    console.error("Error:", error instanceof Error ? error.message : String(error));
+    console.error(
+      "Error:",
+      error instanceof Error ? error.message : String(error),
+    );
     Deno.exit(1);
   }
 }

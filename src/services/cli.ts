@@ -150,7 +150,11 @@ Examples:
     if (args.verbose && prompt.versions) {
       console.log("\nVersion History:");
       for (const v of prompt.versions) {
-        console.log(`  v${v.version} - ${v.createdAt} ${v.changeDescription ? `(${v.changeDescription})` : ""}`);
+        console.log(
+          `  v${v.version} - ${v.createdAt} ${
+            v.changeDescription ? `(${v.changeDescription})` : ""
+          }`,
+        );
       }
     }
   }
@@ -164,7 +168,9 @@ Examples:
 
     console.log("Prompts:");
     for (const prompt of prompts) {
-      console.log(`  ${prompt.id} - ${prompt.name} (updated: ${prompt.updatedAt})`);
+      console.log(
+        `  ${prompt.id} - ${prompt.name} (updated: ${prompt.updatedAt})`,
+      );
     }
   }
 
@@ -183,7 +189,11 @@ Examples:
 
     console.log("Versions:");
     for (const v of versions) {
-      console.log(`  v${v.version} - ${v.createdAt} ${v.changeDescription ? `(${v.changeDescription})` : ""}`);
+      console.log(
+        `  v${v.version} - ${v.createdAt} ${
+          v.changeDescription ? `(${v.changeDescription})` : ""
+        }`,
+      );
       console.log(`    ID: ${v.id}`);
     }
   }
@@ -195,32 +205,48 @@ Examples:
 
     if (!promptId || !fromVersionRef || !toVersionRef) {
       console.error("Error: prompt ID and two version references are required");
-      console.error("Usage: prompt-manager compare <prompt-id> <from-version> <to-version>");
+      console.error(
+        "Usage: prompt-manager compare <prompt-id> <from-version> <to-version>",
+      );
       console.error("Version can be: v1, v2, v3... or version ID");
       Deno.exit(1);
     }
 
-    const result = await this.promptManager.compareVersions(promptId, fromVersionRef, toVersionRef);
+    const result = await this.promptManager.compareVersions(
+      promptId,
+      fromVersionRef,
+      toVersionRef,
+    );
     if (!result) {
-      console.error("Error: Could not compare versions. Check that prompt and versions exist.");
+      console.error(
+        "Error: Could not compare versions. Check that prompt and versions exist.",
+      );
       Deno.exit(1);
     }
 
-    console.log(`Comparing v${result.fromVersion.version} → v${result.toVersion.version}`);
-    
+    console.log(
+      `Comparing v${result.fromVersion.version} → v${result.toVersion.version}`,
+    );
+
     if (result.changes.added.length > 0) {
       console.log(colors.green("\nAdded:"));
-      result.changes.added.forEach(line => console.log(colors.green(`+ ${line}`)));
+      result.changes.added.forEach((line) =>
+        console.log(colors.green(`+ ${line}`))
+      );
     }
 
     if (result.changes.removed.length > 0) {
       console.log(colors.red("\nRemoved:"));
-      result.changes.removed.forEach(line => console.log(colors.red(`- ${line}`)));
+      result.changes.removed.forEach((line) =>
+        console.log(colors.red(`- ${line}`))
+      );
     }
 
     if (result.changes.modified.length > 0) {
       console.log(colors.yellow("\nModified:"));
-      result.changes.modified.forEach(line => console.log(colors.yellow(`~ ${line}`)));
+      result.changes.modified.forEach((line) =>
+        console.log(colors.yellow(`~ ${line}`))
+      );
     }
   }
 
@@ -235,9 +261,14 @@ Examples:
       Deno.exit(1);
     }
 
-    const prompt = await this.promptManager.revertToVersion(promptId, versionRef);
+    const prompt = await this.promptManager.revertToVersion(
+      promptId,
+      versionRef,
+    );
     if (!prompt) {
-      console.error("Error: Could not revert to version. Check that prompt and version exist.");
+      console.error(
+        "Error: Could not revert to version. Check that prompt and version exist.",
+      );
       Deno.exit(1);
     }
 

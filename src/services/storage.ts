@@ -6,7 +6,8 @@ export class StorageService {
   private dataDir: string;
 
   constructor(dataDir?: string) {
-    this.dataDir = dataDir || join(Deno.env.get("HOME") || ".", ".prompt-manager");
+    this.dataDir = dataDir ||
+      join(Deno.env.get("HOME") || ".", ".prompt-manager");
   }
 
   async init(): Promise<void> {
@@ -32,7 +33,10 @@ export class StorageService {
       const promptData = await Deno.readTextFile(promptPath);
       const prompt = JSON.parse(promptData) as Prompt;
 
-      const currentVersion = await this.getVersion(prompt.id, prompt.currentVersionId);
+      const currentVersion = await this.getVersion(
+        prompt.id,
+        prompt.currentVersionId,
+      );
       if (!currentVersion) {
         return null;
       }
@@ -46,10 +50,15 @@ export class StorageService {
     }
   }
 
-  async getVersion(promptId: string, versionId: string): Promise<PromptVersion | null> {
+  async getVersion(
+    promptId: string,
+    versionId: string,
+  ): Promise<PromptVersion | null> {
     try {
       const versionFiles = [];
-      for await (const entry of Deno.readDir(join(this.dataDir, "versions", promptId))) {
+      for await (
+        const entry of Deno.readDir(join(this.dataDir, "versions", promptId))
+      ) {
         if (entry.isFile && entry.name.endsWith(".json")) {
           versionFiles.push(entry.name);
         }
@@ -105,6 +114,8 @@ export class StorageService {
 
   async getNextVersionNumber(promptId: string): Promise<number> {
     const versions = await this.getAllVersions(promptId);
-    return versions.length > 0 ? Math.max(...versions.map(v => v.version)) + 1 : 1;
+    return versions.length > 0
+      ? Math.max(...versions.map((v) => v.version)) + 1
+      : 1;
   }
 }
