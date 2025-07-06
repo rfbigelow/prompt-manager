@@ -5,7 +5,7 @@ import { CLIService } from "./services/cli.ts";
 
 async function main() {
   const args = parseArgs(Deno.args, {
-    string: ["command", "name", "file"],
+    string: ["command", "name", "file", "message"],
     boolean: ["help", "list", "verbose"],
     alias: {
       h: "help",
@@ -13,6 +13,7 @@ async function main() {
       v: "verbose",
       n: "name",
       f: "file",
+      m: "message",
     },
   });
 

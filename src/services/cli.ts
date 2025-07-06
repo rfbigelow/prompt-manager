@@ -62,11 +62,14 @@ Options:
   -h, --help      Show help
   -n, --name      Prompt name
   -f, --file      File containing prompt content
+  -m, --message   Change description for the version
   -v, --verbose   Show detailed output
 
 Examples:
   prompt-manager create -n "My Prompt" -f prompt.txt
+  prompt-manager create -n "My Prompt" -f prompt.txt -m "Initial version"
   prompt-manager update <id> -f updated-prompt.txt
+  prompt-manager update <id> -f updated-prompt.txt -m "Fixed typos"
   prompt-manager get <id>
   prompt-manager list
   prompt-manager versions <id>
@@ -95,6 +98,7 @@ Examples:
     const prompt = await this.promptManager.createPrompt({
       name,
       content,
+      changeDescription: args.message,
     });
 
     console.log(colors.green("✓ Prompt created successfully"));
@@ -110,11 +114,16 @@ Examples:
       Deno.exit(1);
     }
 
-    const input: { name?: string; content?: string } = {};
+    const input: {
+      name?: string;
+      content?: string;
+      changeDescription?: string;
+    } = {};
     if (args.name) input.name = args.name;
     if (args.file) {
       input.content = await Deno.readTextFile(args.file);
     }
+    if (args.message) input.changeDescription = args.message;
 
     const prompt = await this.promptManager.updatePrompt(id, input);
     if (!prompt) {

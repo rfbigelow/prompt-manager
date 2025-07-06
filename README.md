@@ -8,6 +8,7 @@ A command-line tool for managing and versioning AI prompts with full version his
 - 🔄 **Comparison** - Compare different versions to see what changed
 - ⏪ **Reversion** - Revert to any previous version
 - 🏷️ **Tagging** - Organize prompts with tags
+- 📝 **Change Descriptions** - Document what changed in each version
 - 📁 **File-based Storage** - Simple, portable JSON storage
 - 🎨 **Clean CLI** - Intuitive command-line interface with colored output
 
@@ -47,6 +48,9 @@ deno task dev <command> [options]
 # Create from file
 prompt-manager create -n "API Request Template" -f templates/api-request.txt
 
+# Create with a custom change description
+prompt-manager create -n "API Request Template" -f templates/api-request.txt -m "Initial API request template for v2 endpoints"
+
 # Example output:
 # ✓ Prompt created successfully
 # ID: 550e8400-e29b-41d4-a716-446655440000
@@ -59,6 +63,9 @@ prompt-manager create -n "API Request Template" -f templates/api-request.txt
 ```bash
 # Update creates a new version
 prompt-manager update 550e8400-e29b-41d4-a716-446655440000 -f templates/api-request-v2.txt
+
+# Update with a change description
+prompt-manager update 550e8400-e29b-41d4-a716-446655440000 -f templates/api-request-v2.txt -m "Added error handling and retry logic"
 
 # Example output:
 # ✓ Prompt updated successfully
@@ -95,7 +102,7 @@ prompt-manager versions 550e8400-e29b-41d4-a716-446655440000
 # Versions:
 #   v1 - 2024-01-20T10:00:00 (Initial version)
 #     ID: 770g0611-g40d-63f6-c938-668877661222
-#   v2 - 2024-01-20T10:30:00 (Added error handling section)
+#   v2 - 2024-01-20T10:30:00 (Added error handling and retry logic)
 #     ID: 880h1722-h51e-74g7-d049-779988772333
 ```
 
